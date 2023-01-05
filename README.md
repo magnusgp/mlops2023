@@ -1,7 +1,13 @@
-mlops2023
+MNIST PROJECT
 ==============================
 
-A repository for course work in DTU Course 02476 - Machine Learning Operations
+A repository for course work in DTU Course 02476 - Machine Learning Operations. The course repository is found here:
+
+- https://github.com/SkafteNicki/dtu_mlops.git
+
+This repository contains all files necessary to train and validate a neural network classifier on the MNIST Digits Dataset. 
+
+
 
 Project Organization
 ------------
