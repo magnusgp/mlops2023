@@ -37,14 +37,27 @@ def train(lr, epochs, model_checkpoint):
             running_loss += loss.item()
         else:
             training_loss.append(running_loss/len(trainloader))
+    
+    # assume we have a trained model
+    import matplotlib.pyplot as plt
+    from sklearn.metrics import classification_report, confusion_matrix, ConfusionMatrixDisplay
+    preds, target = [], []
+    for batch in trainloader:
+        x, y = batch
+        probs = model(x)
+        preds.append(probs.argmax(dim=-1))
+        target.append(y.detach())
 
-    plt.plot(training_loss, label='Training loss')
-    plt.legend(frameon=False)
-    # save plot to the visualizations folder
-    plt.savefig('src/visualization/training_loss.png')
-    # save model to the trained_models folder
-    print("Saving model checkpoint to: {}".format(model_checkpoint))
-    torch.save(model, model_checkpoint)
+    target = torch.cat(target, dim=0)
+    preds = torch.cat(preds, dim=0)
+
+    report = classification_report(target, preds)
+    with open("classification_report.txt", 'w') as outfile:
+        outfile.write(report)
+    confmat = confusion_matrix(target, preds)
+    disp = ConfusionMatrixDisplay(cm = confmat, )
+    plt.savefig('confusion_matrix.png')
+
     
 if __name__ == "__main__":
     cli()
