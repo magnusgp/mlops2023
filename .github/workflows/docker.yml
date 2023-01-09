@@ -17,5 +17,5 @@ jobs:
     - name: Build the Docker image
       run: |
         docker build . --file Dockerfile \
-          --tag docker.io:$GITHUB_SHA
-        docker push docker.io:$GITHUB_SHA
+          --tag magnusgp/mlops2023:$GITHUB_SHA
+        docker push magnusgp/mlops2023:$GITHUB_SHA
