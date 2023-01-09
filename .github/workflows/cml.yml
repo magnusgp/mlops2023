@@ -4,18 +4,29 @@
    run:
      runs-on: ubuntu-latest
      steps:
-       - uses: actions/checkout@v2
-       - uses: iterative/setup-cml@v1
-       - name: Train model
-         run: |
-           pip install -r requirements.txt  # install dependencies
-           python src/models/train_cml.py  # run training
-       - name: Write report
-         env:
-           # this authenticates that the right permissions are in place
-           REPO_TOKEN: $
-         run: |
-           # send all information to report.md that will be reported to us when the workflow finish
-           cat classification_report.txt >> report.md
-           cml-publish confusion_matrix.png --md >> report.md
-           cml-send-comment report.md
+      - uses: actions/checkout@v2
+      - uses: iterative/setup-cml@v1
+      - name: Get pip cache dir
+        id: pip-cache
+        run: |
+          echo "::set-output name=dir::$(pip cache dir)"
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.pip-cache.outputs.dir }}
+          key: ${{ matrix.os }}-py${{ matrix.python-version }}-pt${{ matrix.pytorch-version }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ matrix.os }}-py${{ matrix.python-version }}-pt${{ matrix.pytorch-version }}-pip-
+      - name: Train model
+        run: |
+          pip install -r requirements.txt  # install dependencies
+          python src/models/train_cml.py  # run training
+      - name: Write report
+        env:
+          # this authenticates that the right permissions are in place
+          REPO_TOKEN: $
+        run: |
+          # send all information to report.md that will be reported to us when the workflow finish
+          cat classification_report.txt >> report.md
+          cml-publish confusion_matrix.png --md >> report.md
+          cml-send-comment report.md
