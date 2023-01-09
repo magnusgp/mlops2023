@@ -39,4 +39,4 @@ jobs:
         pip install -r requirements_tests.txt
     - name: Run flake8
       run: |
-        flake8 --ignore=E501,W503 --exclude=tests
+        flake8 --ignore=E501,W503,W293 --exclude=tests

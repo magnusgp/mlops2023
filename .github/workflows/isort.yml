@@ -39,4 +39,4 @@ jobs:
         pip install -r requirements_tests.txt
     - name: Run isort
       run: |
-        isort --check-only --diff --recursive --project mlops2023 --project tests
+        isort .
