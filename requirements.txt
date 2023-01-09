@@ -4,6 +4,7 @@
 # external requirements
 click
 torch
+tqdm
 Sphinx
 coverage
 awscli==1.27.38
