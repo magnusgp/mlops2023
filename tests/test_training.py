@@ -3,7 +3,9 @@ from torch import optim, nn
 from src.models.model import Model
 from tqdm import tqdm
 import pytest
+import os
 
+@pytest.mark.skipif(not os.path.exists('data/processed/trainset.pt'), reason="Training files not found")
 @pytest.mark.parametrize("lr,criterion", [(1e-3, nn.NLLLoss()), (1e-4, nn.CrossEntropyLoss()), (1e-5, nn.NLLLoss())])
 def test_training(lr, criterion):
     epochs = 5
